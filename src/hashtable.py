@@ -18,6 +18,7 @@ class HashTable:
     '''
 
     def __init__(self, capacity):
+        self.count = 0
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
 
@@ -45,14 +46,17 @@ class HashTable:
         return self._hash(key) % self.capacity
 
     def insert(self, key, value):
-        '''
-        Store the value with the given key.
+        index = self._hash_mod(key)
 
-        Hash collisions should be handled with Linked List Chaining.
-
-        Fill this in.
-        '''
-        pass
+        # If hashTable is full, make it bigger to fit
+        if self.count >= self.capacity:
+            self.resize()
+        if index > self.count:
+            print("ERROR: Out of range")
+        for i in range(self.count, index, -1):
+            self.storage[i] = self.storage[i-1]
+        self.storage[index] = value
+        self.count += 1
 
     def remove(self, key):
         '''
