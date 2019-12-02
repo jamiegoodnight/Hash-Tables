@@ -48,7 +48,6 @@ class HashTable:
     def insert(self, key, value):
         index = self._hash_mod(key)
 
-        # If hashTable is full, make it bigger to fit
         if self.count >= self.capacity:
             self.resize()
         if index > self.count:
@@ -85,7 +84,12 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        self.capacity *= 2
+        new_storage = [None] * self.capacity
+        for i in range(self.count):
+            new_storage[i] = self.storage[i]
+
+        self.storage = new_storage
 
 
 if __name__ == "__main__":
