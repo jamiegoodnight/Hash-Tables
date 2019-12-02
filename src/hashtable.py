@@ -65,7 +65,12 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
+        if index >= self.count:
+            print("Error: Out of range")
+        for i in range(index, self.count-1, 1):
+            self.storage[i] = self.storage[i+1]
+        self.count -= 1
 
     def retrieve(self, key):
         '''
@@ -75,7 +80,10 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
+        if index > self.count:
+            print("ERROR: Not in range")
+        return self.storage[index]
 
     def resize(self):
         '''
