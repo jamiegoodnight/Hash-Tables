@@ -45,15 +45,15 @@ class HashTable:
 
     def insert(self, key, value):
         index = self._hash_mod(key)
+        cur_pair = self.storage[index]
+        pair = LinkedPair(key, value)
 
-        if self.count >= self.capacity:
-            self.resize()
-        if index > self.count:
-            print("ERROR: Out of range")
-        for i in range(self.count, index, -1):
-            self.storage[i] = self.storage[i-1]
-        self.storage[index] = value
-        self.count += 1
+        if cur_pair is not None and cur_pair.key is key:
+            cur_pair.value = value
+        else:
+            pair.next = self.storage[index]
+            self.storage[index] = pair
+            self.count += 1
 
     def remove(self, key):
         '''
@@ -62,10 +62,11 @@ class HashTable:
         Fill this in.
         '''
         index = self._hash_mod(key)
-        if index >= self.count:
-            print("Error: Out of range")
-        for i in range(index, self.count-1, 1):
-            self.storage[i] = self.storage[i+1]
+        cur_pair = self.storage[index]
+
+        if cur_pair is None:
+            print("ERROR: Key not found")
+        self.storage[index] = None
         self.count -= 1
 
     def retrieve(self, key):
@@ -97,7 +98,7 @@ class HashTable:
             cur_pair = pair
             while cur_pair is not None:
                 self.insert(cur_pair.key, cur_pair.value)
-            cur_pair = cur_pair.next
+                cur_pair = cur_pair.next
 
 
 if __name__ == "__main__":
