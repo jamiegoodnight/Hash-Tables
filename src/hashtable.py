@@ -25,7 +25,6 @@ class HashTable:
     def _hash(self, key):
         '''
         Hash an arbitrary key and return an integer.
-
         You may replace the Python hash with DJB2 as a stretch goal.
         '''
         return hash(key)
@@ -33,7 +32,6 @@ class HashTable:
     def _hash_djb2(self, key):
         '''
         Hash an arbitrary key using DJB2 hash
-
         OPTIONAL STRETCH: Research and implement DJB2
         '''
         pass
@@ -60,9 +58,7 @@ class HashTable:
     def remove(self, key):
         '''
         Remove the value stored with the given key.
-
         Print a warning if the key is not found.
-
         Fill this in.
         '''
         index = self._hash_mod(key)
@@ -75,29 +71,33 @@ class HashTable:
     def retrieve(self, key):
         '''
         Retrieve the value stored with the given key.
-
         Returns None if the key is not found.
-
         Fill this in.
         '''
         index = self._hash_mod(key)
-        if index > self.count:
-            print("ERROR: Not in range")
-        return self.storage[index]
+        cur_pair = self.storage[index]
+        if cur_pair is None:
+            return None
+        else:
+            while cur_pair is not None:
+                if cur_pair.key == key:
+                    return cur_pair.value
+                cur_pair = cur_pair.next
 
     def resize(self):
         '''
         Doubles the capacity of the hash table and
         rehash all key/value pairs.
-
         Fill this in.
         '''
+        orig_storage = self.storage
         self.capacity *= 2
-        new_storage = [None] * self.capacity
-        for i in range(self.count):
-            new_storage[i] = self.storage[i]
-
-        self.storage = new_storage
+        self.storage = [None] * self.capacity
+        for pair in orig_storage:
+            cur_pair = pair
+            while cur_pair is not None:
+                self.insert(cur_pair.key, cur_pair.value)
+            cur_pair = cur_pair.next
 
 
 if __name__ == "__main__":
